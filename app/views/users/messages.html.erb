@@ -1,0 +1,29 @@
+<nav class="navbar navbar-toggleable-md navbar-light bg-faded" style="background-color: #e3f2fd;">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="/">
+      <img src="https://img.clipartfest.com/52ef4563e130e26acbfa58fd05075ccc_-cartoon-eyeball-images-cartoon-eye-clipart-black-and-white_4169-2007.jpeg" width="30" height="30" alt="">
+    </a>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+
+          <li class="nav-item active">
+          <%= link_to 'Home', "/", class:"nav-link" %>
+          </li>
+
+          <li class="nav-item active">
+          <%= link_to 'Menu', "/menus?section=Breakfast", class:"nav-link" %>
+          </li>
+
+          <li class="nav-item active">
+          <%= link_to 'Contact Us'.html_safe, "/contact-us", class:"nav-link" %>
+          </li>
+
+          <li class="nav-item active">
+          <%= link_to 'Logout', session_path,:method => :delete, class:"nav-link" %>
+          </li>
+      </ul>
+    </div>
+  </nav>

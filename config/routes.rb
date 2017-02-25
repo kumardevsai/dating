@@ -6,5 +6,12 @@ Rails.application.routes.draw do
   post '/register' => 'users#create'
   post '/login' => 'sessions#create'
 
-  resources :users
+
+  resources :users do
+    member do
+      get '/messages' => 'users#messages'
+    end
+  end
+  resources :sessions 
+
 end
