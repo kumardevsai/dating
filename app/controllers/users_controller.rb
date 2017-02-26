@@ -33,6 +33,8 @@ class UsersController < ApplicationController
  		if current_user.nil?
 			redirect_to root_path
 		end
+		@all_user = User.all_except(@current_user)
+		@isFriend = false
 	end
 
 	private

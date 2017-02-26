@@ -3,157 +3,326 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/lib/w3.css">
 <link href='https://fonts.googleapis.com/css?family=RobotoDraft' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"><style>
-html,body,h1,h2,h3,h4,h5 {font-family: "RobotoDraft", "Roboto", sans-serif;}
-.w3-sidenav a {padding:16px;}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    body,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    html {
+        font-family: "RobotoDraft", "Roboto", sans-serif;
+    }
+    .w3-sidenav a {
+        padding: 16px;
+    }
 </style>
 <body>
 
-<!-- Side Navigation -->
-<nav class="w3-sidenav w3-collapse w3-white w3-animate-left w3-card-2" style="z-index:3;width:320px;" id="mySidenav">
-  <a class="w3-border-bottom w3-large"><img src="<%= @current_user.image_url %>" style="width:60%;"> <%= @current_user.name %> </a>
-  <a href="javascript:void(0)" onclick="w3_close()" title="Close Sidemenu"
-  class="w3-hide-large w3-closenav w3-large">Close <i class="fa fa-remove"></i></a>
-  <!-- Received messages  -->
-  <div>
-    <a id="inboxBtn" onclick="received_nav('received')" href="javascript:void(0)"><i class="fa fa-inbox w3-padding-right"></i>Inbox (<%= @current_user.received_messages.count.to_s %>)<i class="w3-padding-left fa fa-caret-down"></i></a>
-    <div id="received" class="w3-hide w3-animate-left">
-      <% @current_user.received_messages.each do |message| %>
-      <!-- Handle case messages haven't read yet  -->
-      <% if message.read_at.nil? %>
-      <a href="javascript:void(0)" class="w3-border-bottom test w3-hover-light-grey" style ='background-color: #95A09F;' onclick="openMail('<%= message.id %>');w3_close();" id="firstTab">
-        <div class="w3-container">
-          <img class="w3-round w3-margin-right" src="<%= message.sender.image_url %>" style="width:15%;"><span class="w3-opacity w3-large"> <%=message.sender.name + "    (unread)" %> </span>
-          <h6>Tittle: <%= message.title %></h6>
-        </div>
-      </a>
+    <!-- Side Navigation -->
+    <nav class="w3-sidenav w3-collapse w3-white w3-animate-left w3-card-2" style="z-index:3;width:320px;" id="mySidenav">
+        <a class="w3-border-bottom w3-large"><img src="<%= @current_user.image_url %>" style="width:60%;">
+            <%= @current_user.name %>
+        </a>
+        <a href="javascript:void(0)" onclick="w3_close()" title="Close Sidemenu" class="w3-hide-large w3-closenav w3-large">Close
+            <i class="fa fa-remove"></i>
+        </a>
 
-      <% else %>
-      <!-- Handle case messages were read  -->
-      <a href="javascript:void(0)" class="w3-border-bottom test w3-hover-light-grey" onclick="openMail('<%= message.id %>');w3_close();" id="firstTab">
-        <div class="w3-container">
-          <img class="w3-round w3-margin-right" src="<%= message.sender.image_url %>" style="width:15%;"><span class="w3-opacity w3-large"> <%=message.sender.name%> </span>
-          <h6>Tittle: <%= message.title %></h6>
+        <!-- Get user -->
+        <div>
+            <!-- <a id="firstTab" onclick="openUsers('getUsers');w3_close();" href="javascript:void(0)"><i class="fa fa-users w3-padding-right"></i>Friends</a> -->
+            <a href="javascript:void(0)" class="w3-border-bottom test w3-hover-light-grey" onclick="openUsers('getUsers');w3_close();" id="firstTab">
+                <i class="fa fa-users w3-padding-right"></i>Users</a>
         </div>
-      </a>
-      <% end %>
-      <% end %>
+        <!-- Get friend -->
+        <div>
+            <!-- <a id="firstTab" onclick="openUsers('getUsers');w3_close();" href="javascript:void(0)"><i class="fa fa-users w3-padding-right"></i>Friends</a> -->
+            <a href="javascript:void(0)" class="w3-border-bottom test w3-hover-light-grey" onclick="openFriends('getFriends');w3_close();" id="firstTab">
+                <i class="fa fa-users w3-padding-right"></i>Friends</a>
+        </div>
+        <!-- Received messages  -->
+        <div>
+            <a id="inboxBtn" onclick="received_nav('received')" href="javascript:void(0)">
+                <i class="fa fa-inbox w3-padding-right"></i>Inbox (<%= @current_user.received_messages.count.to_s %>)<i class="w3-padding-left fa fa-caret-down"></i>
+            </a>
+            <div id="received" class="w3-hide w3-animate-left">
+                <% @current_user.received_messages.each do |message| %>
+                <!-- Handle case messages haven't read yet  -->
+                <% if message.read_at.nil? %>
+                <a href="javascript:void(0)" class="w3-border-bottom test w3-hover-light-grey" style='background-color: #95A09F;' onclick="openMail('<%= message.id %>');w3_close();" id="firstTab">
+                    <div class="w3-container">
+                        <img class="w3-round w3-margin-right" src="<%= message.sender.image_url %>" style="width:15%;">
+                        <span class="w3-opacity w3-large">
+                            <%=message.sender.name + "    (unread)" %>
+                        </span>
+                        <h6>Tittle:
+                            <%= message.title %></h6>
+                    </div>
+                </a>
+
+            <% else %>
+                <!-- Handle case messages were read  -->
+                <a href="javascript:void(0)" class="w3-border-bottom test w3-hover-light-grey" onclick="openMail('<%= message.id %>');w3_close();" id="firstTab">
+                    <div class="w3-container">
+                        <img class="w3-round w3-margin-right" src="<%= message.sender.image_url %>" style="width:15%;">
+                        <span class="w3-opacity w3-large">
+                            <%=message.sender.name%>
+                        </span>
+                        <h6>Tittle:
+                            <%= message.title %></h6>
+                    </div>
+                </a>
+                <% end %>
+                <% end %>
+            </div>
+        </div>
+        <!-- Sent message -->
+        <div>
+            <a id="sentBtn" onclick="sent_nav('sent')" href="javascript:void(0)">
+                <i class="fa fa-paper-plane w3-padding-right"></i>Sent<i class="w3-padding-left fa fa-caret-down"></i>
+            </a>
+            <div id="sent" class="w3-hide w3-animate-left">
+                <% @current_user.sent_messages.each do |message| %>
+                <a href="javascript:void(0)" class="w3-border-bottom test w3-hover-light-grey" onclick="openMail('<%= message.id %>');w3_close();" id="firstTab">
+                    <div class="w3-container">
+                        <img class="w3-round w3-margin-right" src="<%= message.sender.image_url %>" style="width:15%;">
+                        <span class="w3-opacity w3-large">
+                            <%=message.sender.name%>
+                        </span>
+                        <h6>Tittle:
+                            <%= message.title %></h6>
+                    </div>
+                </a>
+                <% end %>
+            </div>
+        </div>
+        <!-- Logout  -->
+        <%= link_to "<i class='fa fa-sign-out w3-padding-right'></i>Logout".html_safe,session_path(@current_user), :method => :delete %>
+
+    </nav>
+
+    <!-- Overlay effect when opening the side navigation on small screens -->
+    <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="Close Sidemenu" id="myOverlay"></div>
+
+    <!-- Page content -->
+    <div class="w3-main" style="margin-left:320px;">
+        <i class="fa fa-bars w3-opennav w3-hide-large w3-xlarge w3-margin-left w3-margin-top" onclick="w3_open()"></i>
+        <a href="javascript:void(0)" class="w3-hide-large w3-red w3-button w3-right w3-margin-top w3-margin-right" onclick="document.getElementById('id01').style.display='block'">
+            <i class="fa fa-pencil"></i>
+        </a>
+
+        <% @current_user.received_messages.each do |message|  %>
+        <div id="<%= message.id %>" class="w3-container person">
+            <br>
+            <img class="w3-round  w3-animate-top" src="<%= message.sender.image_url %>" style="width:20%;">
+            <h5 class="w3-opacity">Title:
+                <%= message.title %></h5>
+            <h4>
+                <i class="fa fa-clock-o"></i>
+                From
+                <%= message.sender.name %></h4>
+            <a class="w3-button" href="#">Reply<i class="w3-padding-left fa fa-mail-reply"></i>
+            </a>
+            <a class="w3-button" href="#">Forward<i class="w3-padding-left fa fa-arrow-right"></i>
+            </a>
+            <hr>
+            <p>
+                <%= message.body %>
+            </p>
+        </div>
+        <% end %>
+
+        <% @current_user.sent_messages.each do |message|  %>
+        <div id="<%= message.id %>" class="w3-container person">
+            <br>
+            <img class="w3-round  w3-animate-top" src="<%= message.sender.image_url %>" style="width:20%;">
+            <h5 class="w3-opacity">Title:
+                <%= message.title %></h5>
+            <h4>
+                <i class="fa fa-clock-o"></i>
+                From
+                <%= message.receiver.name %></h4>
+            <a class="w3-button" href="#">Reply<i class="w3-padding-left fa fa-mail-reply"></i>
+            </a>
+            <a class="w3-button" href="#">Forward<i class="w3-padding-left fa fa-arrow-right"></i>
+            </a>
+            <hr>
+            <p>
+                <%= message.body %>
+            </p>
+        </div>
+        <% end %>
+
+        <div id="getUsers" class="users">
+            <ul class="list-inline navigation">
+                <% @all_user.each do |user|%>
+                <li class="list-inline-item">
+                    <img class="w3-round w3-animate-top" src="<%= user.image_url %>" style="width:100px;height:100px">
+                    <h5 class="w3-opacity"><%= user.name %></h5>
+                    <% @current_user.messages_sender_distinct_receivers.each do |message| %>
+                      <% if message.receiver_id.to_i == user.id.to_i %>
+                      <% @isFriend |= true %>
+                      <%else%>
+                      <% @isFriend |= false %>
+                      <% end %>
+                    <% end %>
+                    <% if @isFriend %>
+                    <% @isFriend = false %>
+                    <button id="<%= user.id %>" onclick="addFriend('<%= user.id %>')" class="btn btn-danger">Remove</button><br>
+                    <% else %>
+                    <button id="<%= user.id %>" onclick="addFriend('<%= user.id %>')" class="btn btn-primary">Add Friend</button><br>
+                    <% end %>
+                    <button id="<%= user.id %>" onclick="addFriend('<%= user.id %>')" class="btn btn-success">Send Message</button>
+                </li>
+                <%end%>
+            </ul>
+        </div>
+
+        <div id="getFriends" class="friends">
+            <ul class="list-inline navigation">
+                <% @current_user.messages_sender_distinct_receivers.each do |message| %>
+                <li class="list-inline-item">
+                      <br>
+                      <img class="w3-round  w3-animate-top" src="<%= message.sender.image_url %>" style="width:100px;height:100px">
+                      <h5 class="w3-opacity">
+                          <%= message.receiver.name %></h5>
+                </li>
+                <%end%>
+            </ul>
+        </div>
+
+
     </div>
-  </div>
-  <!-- Sent message -->
-  <div>
-    <a id="sentBtn" onclick="sent_nav('sent')" href="javascript:void(0)"><i class="fa fa-paper-plane w3-padding-right"></i>Sent (<%= @current_user.sent_messages.count.to_s %>)<i class="w3-padding-left fa fa-caret-down"></i></a>
-    <div id="sent" class="w3-hide w3-animate-left">
-      <% @current_user.sent_messages.each do |message| %>
-      <a href="javascript:void(0)" class="w3-border-bottom test w3-hover-light-grey" onclick="openMail('<%= message.id %>');w3_close();" id="firstTab">
-        <div class="w3-container">
-          <img class="w3-round w3-margin-right" src="<%= message.sender.image_url %>" style="width:15%;"><span class="w3-opacity w3-large"> <%=message.sender.name%> </span>
-          <h6>Tittle: <%= message.title %></h6>
-        </div>
-      </a>
-      <% end %>
-    </div>
-  </div>
-  <!-- Logout  -->
 
-  <%= link_to "<i class='fa fa-sign-out w3-padding-right'></i>Logout".html_safe,session_path(@current_user), :method => :delete %>
-  <!-- <a ><i class="fa fa-paper-plane w3-padding-right"></i>Logout</a> -->
-</nav>
+    <script>
 
-<!-- Overlay effect when opening the side navigation on small screens -->
-<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="Close Sidemenu" id="myOverlay"></div>
+        function w3_open() {
+            document.getElementById("mySidenav").style.display = "block";
+            document.getElementById("myOverlay").style.display = "block";
+        }
+        function w3_close() {
+            document.getElementById("mySidenav").style.display = "none";
+            document.getElementById("myOverlay").style.display = "none";
+        }
 
-<!-- Page content -->
-<div class="w3-main" style="margin-left:320px;">
-<i class="fa fa-bars w3-opennav w3-hide-large w3-xlarge w3-margin-left w3-margin-top" onclick="w3_open()"></i>
-<a href="javascript:void(0)" class="w3-hide-large w3-red w3-button w3-right w3-margin-top w3-margin-right" onclick="document.getElementById('id01').style.display='block'"><i class="fa fa-pencil"></i></a>
-<% @current_user.received_messages.each do |message|  %>
-<div id="<%= message.id %>" class="w3-container person">
-  <br>
-  <img class="w3-round  w3-animate-top" src="<%= message.sender.image_url %>" style="width:20%;">
-  <h5 class="w3-opacity">Title: <%= message.title %></h5>
-  <h4><i class="fa fa-clock-o"></i> From <%= message.sender.name %></h4>
-  <a class="w3-button" href="#">Reply<i class="w3-padding-left fa fa-mail-reply"></i></a>
-  <a class="w3-button" href="#">Forward<i class="w3-padding-left fa fa-arrow-right"></i></a>
-  <hr>
-  <p> <%= message.body %> </p>
-</div>
-<% end %>
+        function addFriend(receiver_id) {
+            var x = document.getElementById(id);
+            if (x.className.indexOf("btn-primary") == -1) {
+                x.className = x.className.replace("btn btn-danger", "btn btn-primary");
+                console.log(x.value);
+                x.innerHTML = "Add Friend";
+                // doAjax(<%messages_path%>, "user_id:"+receiver_id)
+            } else {
+                x.className = x.className.replace("btn btn-primary", "btn btn-danger");
+                console.log(x.value);
+                x.innerHTML = "Remove";
 
-<% @current_user.sent_messages.each do |message|  %>
-<div id="<%= message.id %>" class="w3-container person">
-  <br>
-  <img class="w3-round  w3-animate-top" src="<%= message.sender.image_url %>" style="width:20%;">
-  <h5 class="w3-opacity">Title: <%= message.title %></h5>
-  <h4><i class="fa fa-clock-o"></i> From <%= message.receiver.name %></h4>
-  <a class="w3-button" href="#">Reply<i class="w3-padding-left fa fa-mail-reply"></i></a>
-  <a class="w3-button" href="#">Forward<i class="w3-padding-left fa fa-arrow-right"></i></a>
-  <hr>
-  <p> <%= message.body %> </p>
-</div>
-<% end %>
-</div>
+            }
+        }
 
-<script>
-<% if @current_user.received_messages.size > 0 %>
-var openInbox = document.getElementById("inboxBtn");
-openInbox.click();
-<%end%>
+        function received_nav(id) {
+            var x = document.getElementById(id);
+            if (x.className.indexOf("w3-show") == -1) {
+                x.className += " w3-show";
+                x.previousElementSibling.className += " w3-red";
+            } else {
+                x.className = x.className.replace(" w3-show", "");
+                x.previousElementSibling.className = x.previousElementSibling.className.replace(" w3-red", "");
+            }
+        }
 
-function w3_open() {
-    document.getElementById("mySidenav").style.display = "block";
-    document.getElementById("myOverlay").style.display = "block";
-}
-function w3_close() {
-    document.getElementById("mySidenav").style.display = "none";
-    document.getElementById("myOverlay").style.display = "none";
-}
+        function sent_nav(id) {
+            var x = document.getElementById(id);
+            if (x.className.indexOf("w3-show") == -1) {
+                x.className += " w3-show";
+                x.previousElementSibling.className += " w3-red";
+            } else {
+                x.className = x.className.replace(" w3-show", "");
+                x.previousElementSibling.className = x.previousElementSibling.className.replace(" w3-red", "");
+            }
+        }
 
-function received_nav(id) {
-    var x = document.getElementById(id);
-    if (x.className.indexOf("w3-show") == -1) {
-        x.className += " w3-show";
-        x.previousElementSibling.className += " w3-red";
-    } else {
-        x.className = x.className.replace(" w3-show", "");
-        x.previousElementSibling.className =
-        x.previousElementSibling.className.replace(" w3-red", "");
-    }
-}
+        function openUsers(personName) {
+            var i;
+            var x = document.getElementsByClassName("person");
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            x = document.getElementsByClassName("test");
+            for (i = 0; i < x.length; i++) {
+                x[i].className = x[i].className.replace(" w3-light-grey", "");
+            }
+            var x = document.getElementsByClassName("friends");
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            document.getElementById(personName).style.display = "table";
+            event.currentTarget.className += " w3-light-grey";
+        }
 
-function sent_nav(id) {
-    var x = document.getElementById(id);
-    if (x.className.indexOf("w3-show") == -1) {
-        x.className += " w3-show";
-        x.previousElementSibling.className += " w3-red";
-    } else {
-        x.className = x.className.replace(" w3-show", "");
-        x.previousElementSibling.className =
-        x.previousElementSibling.className.replace(" w3-red", "");
-    }
-}
+        function openFriends(personName) {
+            var i;
+            var x = document.getElementsByClassName("person");
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            x = document.getElementsByClassName("test");
+            for (i = 0; i < x.length; i++) {
+                x[i].className = x[i].className.replace(" w3-light-grey", "");
+            }
+            var x = document.getElementsByClassName("users");
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            console.log(personName)
+            document.getElementById(personName).style.display = "table";
+            event.currentTarget.className += " w3-light-grey";
+        }
 
-function openMail(personName) {
-    var i;
-    var x = document.getElementsByClassName("person");
-    for (i = 0; i < x.length; i++) {
-       x[i].style.display = "none";
-    }
-    x = document.getElementsByClassName("test");
-    for (i = 0; i < x.length; i++) {
-       x[i].className = x[i].className.replace(" w3-light-grey", "");
-    }
-    document.getElementById(personName).style.display = "block";
-    event.currentTarget.className += " w3-light-grey";
-    <% @current_user.received_messages.each do |message| %>
-      <% @current_user.received_messages.update(read_at: Time.now()) %>
-    <% end %>
-}
-</script>
+        function openMail(personName) {
+            var i;
+            var x = document.getElementsByClassName("users");
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            var x = document.getElementsByClassName("person");
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            var x = document.getElementsByClassName("friends");
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            x = document.getElementsByClassName("test");
+            for (i = 0; i < x.length; i++) {
+                x[i].className = x[i].className.replace(" w3-light-grey", "");
+            }
+            document.getElementById(personName).style.display = "block";
+            event.currentTarget.className += " w3-light-grey";
+            <% @current_user.received_messages.each do |message| %>
+            <% @current_user.received_messages.update(read_at: Time.now()) %>
+            <% end %>
+        }
 
-<script>
-var openTab = document.getElementById("firstTab");
-openTab.click();
-</script>
+        function doAjax(url, params, callback) {
+          var xmlhttp = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+
+          xmlhttp.onreadystatechange = function() {
+              if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                  callback(xmlhttp.responseText);
+              }
+          }
+
+          xmlhttp.open("POST", url, true);
+          xmlhttp.send(params);
+        }
+
+    </script>
+
+    <script>
+        var openTab = document.getElementById("firstTab");
+        openTab.click();
+    </script>
 
 </body>

@@ -9,4 +9,5 @@ class Message < ApplicationRecord
   def mask_as_read
     self.read_at = time.Now
   end
+
 end

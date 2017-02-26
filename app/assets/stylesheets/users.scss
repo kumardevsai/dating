@@ -1,3 +1,16 @@
+@import "bootstrap";
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+li {
+    padding: 50px;
+}
+
 h1 {
   color: #333;
   font-family: arial, sans-serif;
