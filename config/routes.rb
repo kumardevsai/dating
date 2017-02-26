@@ -9,7 +9,7 @@ Rails.application.routes.draw do
 
   resources :users do
     member do
-      get '/messages' => 'users#messages'
+      get '/home' => 'users#home'
     end
   end
   resources :sessions

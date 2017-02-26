@@ -13,9 +13,10 @@ class UsersController < ApplicationController
 		if @user.save
 			flash[:success] = "Thank you for signing up!"
 			session[:user_id]
-			redirect_to "/friends"
+			redirect_to home_user_path @user.id
 		else
 			flash[:error] = "Error: #{@user.errors.full_messages.to_sentence}"
+			redirect_to root_path
 		end
 	end
 
@@ -27,8 +28,11 @@ class UsersController < ApplicationController
 		end
 	end
 
-	def messages
- 		current_user.sent_messages
+	def home
+		current_user
+ 		if current_user.nil?
+			redirect_to root_path
+		end
 	end
 
 	private
