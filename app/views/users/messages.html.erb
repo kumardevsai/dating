@@ -15,20 +15,20 @@ html,body,h1,h2,h3,h4,h5 {font-family: "RobotoDraft", "Roboto", sans-serif;}
   <a href="javascript:void(0)" onclick="w3_close()" title="Close Sidemenu"
   class="w3-hide-large w3-closenav w3-large">Close <i class="fa fa-remove"></i></a>
   <div>
-    <a id="myBtn" onclick="myFunc('Demo1')" href="javascript:void(0)"><i class="fa fa-inbox w3-padding-right"></i>Inbox (<%= @current_user.received_messages.count.to_s %>)<i class="w3-padding-left fa fa-caret-down"></i></a>
-    <div id="Demo1" class="w3-hide w3-animate-left">
+    <a id="inboxBtn" onclick="received_nav('received')" href="javascript:void(0)"><i class="fa fa-inbox w3-padding-right"></i>Inbox (<%= @current_user.received_messages.count.to_s %>)<i class="w3-padding-left fa fa-caret-down"></i></a>
+    <div id="received" class="w3-hide w3-animate-left">
       <% @current_user.received_messages.each do |message| %>
-
+      <!-- Handle case messages haven't read yet  -->
       <% if message.read_at.nil? %>
-      <a href="javascript:void(0)" class="w3-border-bottom test w3-hover-light-grey" style ='background-color: #2ba6cb;' onclick="openMail('<%= message.id %>');w3_close();" id="firstTab">
+      <a href="javascript:void(0)" class="w3-border-bottom test w3-hover-light-grey" style ='background-color: #95A09F;' onclick="openMail('<%= message.id %>');w3_close();" id="firstTab">
         <div class="w3-container">
-          <img class="w3-round w3-margin-right" src="<%= message.sender.image_url %>" style="width:15%;"><span class="w3-opacity w3-large"> <%=message.sender.name%> </span>
+          <img class="w3-round w3-margin-right" src="<%= message.sender.image_url %>" style="width:15%;"><span class="w3-opacity w3-large"> <%=message.sender.name + "    (unread)" %> </span>
           <h6>Tittle: <%= message.title %></h6>
         </div>
       </a>
 
       <% else %>
-      <!-- Handle case messages haven't read yet  -->
+      <!-- Handle case messages were read  -->
       <a href="javascript:void(0)" class="w3-border-bottom test w3-hover-light-grey" onclick="openMail('<%= message.id %>');w3_close();" id="firstTab">
         <div class="w3-container">
           <img class="w3-round w3-margin-right" src="<%= message.sender.image_url %>" style="width:15%;"><span class="w3-opacity w3-large"> <%=message.sender.name%> </span>
@@ -36,6 +36,20 @@ html,body,h1,h2,h3,h4,h5 {font-family: "RobotoDraft", "Roboto", sans-serif;}
         </div>
       </a>
       <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <div>
+    <a id="sentBtn" onclick="sent_nav('sent')" href="javascript:void(0)"><i class="fa fa-paper-plane w3-padding-right"></i>Sent (<%= @current_user.sent_messages.count.to_s %>)<i class="w3-padding-left fa fa-caret-down"></i></a>
+    <div id="sent" class="w3-hide w3-animate-left">
+      <% @current_user.sent_messages.each do |message| %>
+      <a href="javascript:void(0)" class="w3-border-bottom test w3-hover-light-grey" onclick="openMail('<%= message.id %>');w3_close();" id="firstTab">
+        <div class="w3-container">
+          <img class="w3-round w3-margin-right" src="<%= message.sender.image_url %>" style="width:15%;"><span class="w3-opacity w3-large"> <%=message.sender.name%> </span>
+          <h6>Tittle: <%= message.title %></h6>
+        </div>
+      </a>
       <% end %>
     </div>
   </div>
@@ -63,10 +77,23 @@ html,body,h1,h2,h3,h4,h5 {font-family: "RobotoDraft", "Roboto", sans-serif;}
 </div>
 <% end %>
 
+<% @current_user.sent_messages.each do |message|  %>
+<div id="<%= message.id %>" class="w3-container person">
+  <br>
+  <img class="w3-round  w3-animate-top" src="<%= message.sender.image_url %>" style="width:20%;">
+  <h5 class="w3-opacity">Title: <%= message.title %></h5>
+  <h4><i class="fa fa-clock-o"></i> From <%= message.receiver.name %></h4>
+  <a class="w3-button" href="#">Reply<i class="w3-padding-left fa fa-mail-reply"></i></a>
+  <a class="w3-button" href="#">Forward<i class="w3-padding-left fa fa-arrow-right"></i></a>
+  <hr>
+  <p> <%= message.body %> </p>
+</div>
+<% end %>
 </div>
 
 <script>
-var openInbox = document.getElementById("myBtn");
+var openInbox = document.getElementById("inboxBtn");
+// var openSent = document.getElementById("sentBtn");
 openInbox.click();
 
 function w3_open() {
@@ -78,7 +105,19 @@ function w3_close() {
     document.getElementById("myOverlay").style.display = "none";
 }
 
-function myFunc(id) {
+function received_nav(id) {
+    var x = document.getElementById(id);
+    if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+        x.previousElementSibling.className += " w3-red";
+    } else {
+        x.className = x.className.replace(" w3-show", "");
+        x.previousElementSibling.className =
+        x.previousElementSibling.className.replace(" w3-red", "");
+    }
+}
+
+function sent_nav(id) {
     var x = document.getElementById(id);
     if (x.className.indexOf("w3-show") == -1) {
         x.className += " w3-show";
