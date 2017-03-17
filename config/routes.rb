@@ -5,12 +5,11 @@ Rails.application.routes.draw do
   # get '/login' => 'users#new'
   post '/register' => 'users#create'
   post '/login' => 'sessions#create'
- # get '/users/add-friend/:id' => 'users#add-friend'
-
 
   resources :users do
     member do
       get '/home' => 'users#home'
+      get '/messages/new' => 'messages#new'
     end
     collection do 
       get '/add-friend/:id' => 'users#add_friend'
