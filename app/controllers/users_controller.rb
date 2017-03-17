@@ -33,10 +33,25 @@ class UsersController < ApplicationController
  		if current_user.nil?
 			redirect_to root_path
 		end
-		@all_user = User.all_except(@current_user)
+    @all_friend = []
+    @all_user = []
+		all_user = User.all_except(@current_user)
+    all_user.each do |user|
+      if Relationship.are_friend(current_user.id, user.id)
+        @all_friend << user
+      else
+        @all_user << user
+      end
+    end
 		@isFriend = false
 	end
 
+  def add_friend
+    relationship = Relationship.new(user_one_id: current_user.id, user_two_id: params[:id], status: 1, action_user: 1)
+    relationship.save!
+    redirect_to home_user_path(current_user)
+  end
+  
 	private
 		def user_params
 			params.permit[:name, :email, :password]

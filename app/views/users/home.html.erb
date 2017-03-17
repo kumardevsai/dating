@@ -160,20 +160,13 @@
                 <li class="list-inline-item">
                     <img class="w3-round w3-animate-top" src="<%= user.image_url %>" style="width:100px;height:100px">
                     <h5 class="w3-opacity"><%= user.name %></h5>
-                    <% @current_user.messages_sender_distinct_receivers.each do |message| %>
-                      <% if message.receiver_id.to_i == user.id.to_i %>
-                      <% @isFriend |= true %>
-                      <%else%>
-                      <% @isFriend |= false %>
-                      <% end %>
-                    <% end %>
-                    <% if @isFriend %>
-                    <% @isFriend = false %>
-                    <button id="<%= user.id %>" onclick="addFriend('<%= user.id %>')" class="btn btn-danger">Remove</button><br>
-                    <% else %>
-                    <button id="<%= user.id %>" onclick="addFriend('<%= user.id %>')" class="btn btn-primary">Add Friend</button><br>
-                    <% end %>
-                    <button id="<%= user.id %>" onclick="addFriend('<%= user.id %>')" class="btn btn-success">Send Message</button>
+                    <form action="/users/add-friend/<%= user.id %>" method="get"> 
+                    <button type="submit" class="btn btn-primary">Add Friend</button><br>
+                    </form>
+                    <form action="/users/add-friend/<%= user.id %>" method="get"> 
+                    <button type="submit" class="btn btn-success">Send Message</button><br>
+                    </form>
+
                 </li>
                 <%end%>
             </ul>
@@ -181,14 +174,13 @@
 
         <div id="getFriends" class="friends">
             <ul class="list-inline navigation">
-                <% @current_user.messages_sender_distinct_receivers.each do |message| %>
+              <% @all_friend.each do |friend| %>
                 <li class="list-inline-item">
                       <br>
-                      <img class="w3-round  w3-animate-top" src="<%= message.sender.image_url %>" style="width:100px;height:100px">
-                      <h5 class="w3-opacity">
-                          <%= message.receiver.name %></h5>
+                      <img class="w3-round  w3-animate-top" src="<%= friend.image_url %>" style="width:100px;height:100px">
+                      <h5 class="w3-opacity"> <%= friend.name %> </h5>
                 </li>
-                <%end%>
+              <% end %>
             </ul>
         </div>
 
